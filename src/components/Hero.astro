@@ -1,0 +1,89 @@
+---
+
+---
+
+<section class="hero" aria-label="Video de presentación">
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src="/videos/quince.mp4" type="video/mp4" />
+  </video>
+
+  <div class="hero__scroll" aria-hidden="true">
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: #1a0a0e;
+  }
+
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .hero__scroll-line {
+    width: 1px;
+    height: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero__scroll-line::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.8)
+    );
+    animation: scrollLine 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0% {
+      top: -100%;
+    }
+    50% {
+      top: 100%;
+    }
+    50.01% {
+      top: -100%;
+    }
+    100% {
+      top: 100%;
+    }
+  }
+</style>
