@@ -1,0 +1,341 @@
+---
+---
+
+<div id="confirmationModal" class="modal">
+  <div class="modal__overlay"></div>
+  <div class="modal__content">
+    <button class="modal__close" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <h2 class="modal__title">Confirmar Asistencia</h2>
+    <p class="modal__subtitle">¡Nos encantaría contar con tu presencia!</p>
+
+    <form id="confirmationForm" class="form">
+      <div class="form__group">
+        <label for="nombre" class="form__label">Nombre completo</label>
+        <input 
+          type="text" 
+          id="nombre" 
+          name="nombre" 
+          class="form__input" 
+          required 
+          placeholder="Tu nombre"
+        />
+      </div>
+
+      <div class="form__group">
+        <label for="telefono" class="form__label">Número de teléfono</label>
+        <input 
+          type="tel" 
+          id="telefono" 
+          name="telefono" 
+          class="form__input" 
+          required 
+          placeholder="+57 300 123 4567"
+        />
+      </div>
+
+      <div class="form__group">
+        <label for="acompanantes" class="form__label">Número de acompañantes</label>
+        <input 
+          type="number" 
+          id="acompanantes" 
+          name="acompanantes" 
+          class="form__input" 
+          min="0" 
+          max="10" 
+          value="0" 
+          required 
+        />
+        <small class="form__hint">Sin incluirte tú</small>
+      </div>
+
+      <button type="submit" class="form__submit">
+        <span class="form__submit-text">Confirmar</span>
+        <span class="form__submit-loader"></span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal.is-open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(74, 52, 56, 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal__content {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 24px;
+    padding: 40px 32px;
+    box-shadow: 0 20px 60px rgba(74, 52, 56, 0.3);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+  }
+
+  .modal.is-open .modal__content {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--color-text-light);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .modal__close:hover {
+    background: var(--color-rose-lighter);
+    color: var(--color-rose);
+  }
+
+  .modal__close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .modal__title {
+    font-family: var(--font-script);
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    font-weight: 400;
+    color: var(--color-rose);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .modal__subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .form__group {
+    margin-bottom: 24px;
+  }
+
+  .form__label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 8px;
+  }
+
+  .form__input {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-text);
+    background: var(--color-rose-lighter);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+  }
+
+  .form__input:focus {
+    outline: none;
+    border-color: var(--color-rose-medium);
+    background: white;
+  }
+
+  .form__input::placeholder {
+    color: var(--color-text-light);
+    opacity: 0.6;
+  }
+
+  .form__hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .form__submit {
+    width: 100%;
+    padding: 16px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: white;
+    background: linear-gradient(
+      135deg,
+      var(--color-rose) 0%,
+      var(--color-rose-medium) 100%
+    );
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(212, 137, 158, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form__submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(212, 137, 158, 0.4);
+  }
+
+  .form__submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .form__submit-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    opacity: 0;
+    animation: spin 0.6s linear infinite;
+  }
+
+  .form__submit.is-loading .form__submit-text {
+    opacity: 0;
+  }
+
+  .form__submit.is-loading .form__submit-loader {
+    opacity: 1;
+  }
+
+  @keyframes spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .modal__content {
+      padding: 32px 24px;
+    }
+
+    .modal__title {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+
+<script>
+  const modal = document.getElementById('confirmationModal');
+  const closeBtn = modal?.querySelector('.modal__close');
+  const overlay = modal?.querySelector('.modal__overlay');
+  const form = document.getElementById('confirmationForm') as HTMLFormElement;
+  const submitBtn = form?.querySelector('.form__submit');
+
+  // Abrir modal
+  window.openConfirmationModal = () => {
+    modal?.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Cerrar modal
+  const closeModal = () => {
+    modal?.classList.remove('is-open');
+    document.body.style.overflow = '';
+    form?.reset();
+  };
+
+  closeBtn?.addEventListener('click', closeModal);
+  overlay?.addEventListener('click', closeModal);
+
+  // Cerrar con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+
+  // Manejar envío del formulario
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!submitBtn) return;
+
+    submitBtn.classList.add('is-loading');
+    submitBtn.setAttribute('disabled', 'true');
+
+    const formData = new FormData(form);
+    const data = {
+      nombre: formData.get('nombre'),
+      telefono: formData.get('telefono'),
+      num_acompanantes: parseInt(formData.get('acompanantes') as string),
+    };
+
+    try {
+      const response = await fetch('/api/confirmar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al confirmar asistencia');
+      }
+
+      // Redirigir a página de confirmación exitosa
+      window.location.href = '/confirmacion-exitosa';
+
+    } catch (error) {
+      console.error('Error:', error);
+      window.showToast('Hubo un error. Por favor intenta de nuevo.', 'error');
+      
+      submitBtn.classList.remove('is-loading');
+      submitBtn.removeAttribute('disabled');
+    }
+  });
+
+  // Hacer disponible globalmente
+  declare global {
+    interface Window {
+      openConfirmationModal: () => void;
+    }
+  }
+</script>

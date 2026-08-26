@@ -1,0 +1,136 @@
+---
+---
+
+<div id="toast" class="toast">
+  <div class="toast__icon"></div>
+  <p class="toast__message"></p>
+</div>
+
+<style>
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: white;
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(74, 52, 56, 0.2);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    max-width: 90%;
+  }
+
+  .toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .toast__icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toast__icon::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+  }
+
+  .toast--success {
+    border: 2px solid #10b981;
+  }
+
+  .toast--success .toast__icon {
+    background: #10b981;
+  }
+
+  .toast--success .toast__icon::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .toast--error {
+    border: 2px solid #ef4444;
+  }
+
+  .toast--error .toast__icon {
+    background: #ef4444;
+  }
+
+  .toast--error .toast__icon::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .toast__message {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    .toast {
+      bottom: 24px;
+      padding: 14px 20px;
+    }
+
+    .toast__message {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<script>
+  let toastTimeout: number;
+
+  window.showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    const toast = document.getElementById('toast');
+    const messageEl = toast?.querySelector('.toast__message');
+
+    if (!toast || !messageEl) return;
+
+    // Limpiar timeout anterior
+    if (toastTimeout) {
+      clearTimeout(toastTimeout);
+    }
+
+    // Remover clases anteriores
+    toast.classList.remove('is-visible', 'toast--success', 'toast--error');
+
+    // Actualizar contenido
+    messageEl.textContent = message;
+    toast.classList.add(`toast--${type}`);
+
+    // Mostrar toast
+    setTimeout(() => {
+      toast.classList.add('is-visible');
+    }, 10);
+
+    // Ocultar después de 4 segundos
+    toastTimeout = window.setTimeout(() => {
+      toast.classList.remove('is-visible');
+    }, 4000);
+  };
+
+  // Hacer disponible globalmente
+  declare global {
+    interface Window {
+      showToast: (message: string, type?: 'success' | 'error') => void;
+    }
+  }
+</script>

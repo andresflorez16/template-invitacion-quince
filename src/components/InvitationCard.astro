@@ -2,10 +2,69 @@
 import { invitation } from "../data/invitation";
 ---
 
-<section class="invitation" aria-label="Detalles de la invitación">
+<section class="invitation invitation--animate" aria-label="Detalles de la invitación">
   <div class="invitation__bg-blobs" aria-hidden="true"></div>
 
+  <!-- Mariposas decorativas en las esquinas -->
+  <div class="corner-butterflies" aria-hidden="true">
+    <div class="corner-butterfly corner-butterfly--top-left">
+      <img src="/butterfly.png" alt="" />
+    </div>
+    
+    <div class="corner-butterfly corner-butterfly--top-right">
+      <img src="/butterfly.png" alt="" />
+    </div>
+    
+    <div class="corner-butterfly corner-butterfly--bottom-left">
+      <img src="/butterfly.png" alt="" />
+    </div>
+    
+    <div class="corner-butterfly corner-butterfly--bottom-right">
+      <img src="/butterfly.png" alt="" />
+    </div>
+  </div>
+
+  <!-- Rosas decorativas en los bordes -->
+  <div class="corner-roses" aria-hidden="true">
+    <!-- Rosa superior izquierda -->
+    <div class="corner-rose corner-rose--top-left">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="16" fill="#e8b4c4" opacity="0.4" />
+        <circle cx="40" cy="40" r="10" fill="#d4899e" opacity="0.6" />
+        <circle cx="35" cy="36" r="6" fill="#f5d5de" opacity="0.7" />
+        <circle cx="45" cy="36" r="6" fill="#f5d5de" opacity="0.7" />
+        <circle cx="37" cy="45" r="6" fill="#f5d5de" opacity="0.7" />
+        <circle cx="43" cy="45" r="6" fill="#f5d5de" opacity="0.7" />
+        <path d="M30 50C25 48 22 44 25 35" stroke="#a8778a" stroke-width="2" opacity="0.5" />
+      </svg>
+    </div>
+    
+    <!-- Rosa inferior derecha -->
+    <div class="corner-rose corner-rose--bottom-right">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="16" fill="#e8b4c4" opacity="0.4" />
+        <circle cx="40" cy="40" r="10" fill="#d4899e" opacity="0.6" />
+        <circle cx="35" cy="36" r="6" fill="#f5d5de" opacity="0.7" />
+        <circle cx="45" cy="36" r="6" fill="#f5d5de" opacity="0.7" />
+        <circle cx="37" cy="45" r="6" fill="#f5d5de" opacity="0.7" />
+        <circle cx="43" cy="45" r="6" fill="#f5d5de" opacity="0.7" />
+        <path d="M50 30C55 32 58 36 55 45" stroke="#a8778a" stroke-width="2" opacity="0.5" />
+      </svg>
+    </div>
+  </div>
+
   <article class="card" data-animate>
+    <!-- Mariposas pequeñas decorativas dentro de la tarjeta -->
+    <div class="card__butterflies" aria-hidden="true">
+      <div class="card-butterfly card-butterfly--1">
+        <img src="/butterfly.png" alt="" />
+      </div>
+      
+      <div class="card-butterfly card-butterfly--2">
+        <img src="/butterfly.png" alt="" />
+      </div>
+    </div>
+
     <div class="card__ornament" aria-hidden="true">
       <svg
         viewBox="0 0 120 40"
@@ -98,10 +157,20 @@ import { invitation } from "../data/invitation";
     </address>
 
     <div class="card__action" data-animate>
-      <button class="btn" type="button">Confirmar asistencia</button>
+      <button id="confirmBtn" class="btn" type="button">Confirmar asistencia</button>
     </div>
   </article>
 </section>
+
+<script>
+  // Conectar botón con modal
+  const confirmBtn = document.getElementById('confirmBtn');
+  confirmBtn?.addEventListener('click', () => {
+    if (window.openConfirmationModal) {
+      window.openConfirmationModal();
+    }
+  });
+</script>
 
 <style>
   .invitation {
@@ -111,6 +180,133 @@ import { invitation } from "../data/invitation";
     align-items: center;
     justify-content: center;
     padding: 48px 20px;
+    background: linear-gradient(
+      180deg,
+      #ffe8f0 0%,
+      #fff5f9 50%,
+      #fffbfc 100%
+    );
+  }
+
+  .invitation--animate {
+    opacity: 0;
+    animation: invitationFadeIn 1s ease-out 0.5s forwards;
+  }
+
+  @keyframes invitationFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Mariposas en las esquinas */
+  .corner-butterflies {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .corner-butterfly {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    opacity: 0;
+    animation: fadeInFloat 1.2s ease-out forwards;
+  }
+
+  .corner-butterfly img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
+  }
+
+  .corner-butterfly--top-left {
+    top: 5%;
+    left: 5%;
+    animation-delay: 0.5s;
+  }
+
+  .corner-butterfly--top-right {
+    top: 5%;
+    right: 5%;
+    animation-delay: 0.8s;
+    transform: scaleX(-1);
+  }
+
+  .corner-butterfly--bottom-left {
+    bottom: 10%;
+    left: 8%;
+    animation-delay: 1.1s;
+  }
+
+  .corner-butterfly--bottom-right {
+    bottom: 10%;
+    right: 8%;
+    animation-delay: 1.4s;
+    transform: scaleX(-1);
+  }
+
+  /* Rosas decorativas */
+  .corner-roses {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .corner-rose {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+    animation: fadeInRotate 1.5s ease-out forwards;
+  }
+
+  .corner-rose svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 2px 8px rgba(212, 137, 158, 0.15));
+  }
+
+  .corner-rose--top-left {
+    top: 2%;
+    left: 2%;
+    animation-delay: 0.3s;
+  }
+
+  .corner-rose--bottom-right {
+    bottom: 5%;
+    right: 2%;
+    animation-delay: 1.2s;
+  }
+
+  @keyframes fadeInFloat {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInRotate {
+    0% {
+      opacity: 0;
+      transform: scale(0.5) rotate(-20deg);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
   }
 
   .invitation__bg-blobs {
@@ -152,6 +348,87 @@ import { invitation } from "../data/invitation";
       0 1px 4px rgba(74, 52, 56, 0.03);
     text-align: center;
     z-index: 1;
+    overflow: visible;
+    border: 3px solid transparent;
+    background-image: 
+      linear-gradient(white, white),
+      linear-gradient(135deg, #f5d5de 0%, #e8b4c4 25%, #f5d5de 50%, #e8b4c4 75%, #f5d5de 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 28px;
+    background: linear-gradient(
+      135deg,
+      rgba(245, 213, 222, 0.3) 0%,
+      rgba(232, 180, 196, 0.2) 50%,
+      rgba(245, 213, 222, 0.3) 100%
+    );
+    z-index: -1;
+    opacity: 0;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* Mariposas dentro de la tarjeta */
+  .card__butterflies {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .card-butterfly {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+    animation: butterflyCardFloat 8s ease-in-out infinite;
+  }
+
+  .card-butterfly img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
+  }
+
+  .card-butterfly--1 {
+    top: 15%;
+    right: 10%;
+    animation-delay: 1s;
+  }
+
+  .card-butterfly--2 {
+    bottom: 20%;
+    left: 8%;
+    animation-delay: 2s;
+  }
+
+  @keyframes butterflyCardFloat {
+    0%, 100% {
+      opacity: 0;
+      transform: translateY(0) rotate(0deg);
+    }
+    10%, 90% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateY(-15px) rotate(3deg);
+    }
   }
 
   .card__ornament {
@@ -172,6 +449,7 @@ import { invitation } from "../data/invitation";
     color: var(--color-text);
     line-height: 1.2;
     margin-bottom: 16px;
+    animation: titleFloat 3s ease-in-out infinite;
   }
 
   .card__message {
@@ -181,6 +459,7 @@ import { invitation } from "../data/invitation";
     line-height: 1.7;
     max-width: 320px;
     margin: 0 auto 24px;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
   }
 
   .card__name {
@@ -190,6 +469,59 @@ import { invitation } from "../data/invitation";
     color: var(--color-rose);
     line-height: 1.2;
     margin-bottom: 24px;
+    animation: nameShine 4s ease-in-out infinite, fadeInScale 0.8s ease-out 0.4s backwards;
+    background: linear-gradient(
+      135deg,
+      var(--color-rose) 0%,
+      #d89aaf 25%,
+      var(--color-rose) 50%,
+      #d89aaf 75%,
+      var(--color-rose) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @keyframes titleFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes nameShine {
+    0%, 100% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
   }
 
   .card__divider {
@@ -198,6 +530,7 @@ import { invitation } from "../data/invitation";
     justify-content: center;
     gap: 12px;
     margin: 20px 0;
+    animation: fadeIn 0.6s ease-out 0.6s backwards;
   }
 
   .divider-line {
@@ -210,12 +543,43 @@ import { invitation } from "../data/invitation";
       var(--color-rose-light),
       transparent
     );
+    animation: lineExpand 1s ease-out;
   }
 
   .divider-dot {
     width: 12px;
     height: 12px;
     flex-shrink: 0;
+    animation: rotateStar 8s linear infinite;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes lineExpand {
+    from {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes rotateStar {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .card__date {
@@ -223,6 +587,7 @@ import { invitation } from "../data/invitation";
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    animation: fadeInUp 0.8s ease-out 0.8s backwards;
   }
 
   .date__row {
@@ -237,6 +602,7 @@ import { invitation } from "../data/invitation";
     font-weight: 700;
     letter-spacing: 0.15em;
     color: var(--color-text-light);
+    animation: fadeInScale 0.6s ease-out 1s backwards;
   }
 
   .date__separator {
@@ -244,6 +610,7 @@ import { invitation } from "../data/invitation";
     height: 4px;
     border-radius: 50%;
     background-color: var(--color-rose-medium);
+    animation: pulse 2s ease-in-out infinite;
   }
 
   .date__number {
@@ -251,6 +618,7 @@ import { invitation } from "../data/invitation";
     font-size: 3.5rem;
     line-height: 1;
     color: var(--color-rose);
+    animation: numberBounce 0.8s ease-out 1.1s backwards;
   }
 
   .date__month {
@@ -259,6 +627,35 @@ import { invitation } from "../data/invitation";
     letter-spacing: 0.2em;
     color: var(--color-text-light);
     margin-top: 2px;
+    animation: fadeInScale 0.6s ease-out 1.2s backwards;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.3);
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes numberBounce {
+    0% {
+      opacity: 0;
+      transform: scale(0.3) translateY(-50px);
+    }
+    60% {
+      transform: scale(1.1) translateY(0);
+    }
+    80% {
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   .card__venue {
@@ -267,12 +664,14 @@ import { invitation } from "../data/invitation";
     flex-direction: column;
     align-items: center;
     gap: 2px;
+    animation: fadeInUp 0.8s ease-out 1.4s backwards;
   }
 
   .venue-icon {
     width: 24px;
     height: 24px;
     margin-bottom: 6px;
+    animation: iconBounce 2s ease-in-out infinite;
   }
 
   .venue__name {
@@ -290,6 +689,7 @@ import { invitation } from "../data/invitation";
 
   .card__action {
     margin-top: 32px;
+    animation: fadeInScale 0.8s ease-out 1.6s backwards;
   }
 
   .btn {
@@ -302,26 +702,49 @@ import { invitation } from "../data/invitation";
     background: linear-gradient(
       135deg,
       var(--color-rose) 0%,
-      var(--color-rose-medium) 100%
+      var(--color-rose-medium) 50%,
+      var(--color-rose) 100%
     );
+    background-size: 200% 100%;
     border: none;
     border-radius: 50px;
     padding: 14px 40px;
     cursor: pointer;
     transition:
       transform 0.3s ease,
-      box-shadow 0.3s ease;
+      box-shadow 0.3s ease,
+      background-position 0.5s ease;
     box-shadow: 0 4px 16px rgba(212, 137, 158, 0.3);
+    animation: buttonGlow 3s ease-in-out infinite;
   }
 
   .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 24px rgba(212, 137, 158, 0.4);
+    background-position: 100% center;
   }
 
   .btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 8px rgba(212, 137, 158, 0.3);
+  }
+
+  @keyframes iconBounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes buttonGlow {
+    0%, 100% {
+      box-shadow: 0 4px 16px rgba(212, 137, 158, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 20px rgba(212, 137, 158, 0.5);
+    }
   }
 
   @media (min-width: 768px) {

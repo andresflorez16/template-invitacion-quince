@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import InvitationCard from "../components/InvitationCard.astro";
+import ConfirmationModal from "../components/ConfirmationModal.astro";
+import Toast from "../components/Toast.astro";
 ---
 
 <Layout>
@@ -9,4 +11,7 @@ import InvitationCard from "../components/InvitationCard.astro";
     <Hero />
     <InvitationCard />
   </main>
+  
+  <ConfirmationModal />
+  <Toast />
 </Layout>

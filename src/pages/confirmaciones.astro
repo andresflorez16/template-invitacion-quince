@@ -1,0 +1,360 @@
+---
+import { createClient } from '@supabase/supabase-js';
+
+// Marcar como server-rendered
+export const prerender = false;
+
+// Configurar Supabase
+const supabaseUrl = process.env.SUPABASE_URL || import.meta.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY || import.meta.env.SUPABASE_PUBLISHABLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Faltan variables de entorno de Supabase');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Obtener todas las confirmaciones
+const { data: confirmaciones, error } = await supabase
+  .from('confirmaciones')
+  .select('*')
+  .order('created_at', { ascending: false });
+
+const totalConfirmaciones = confirmaciones?.length || 0;
+const totalPersonas = confirmaciones?.reduce((sum, c) => sum + c.num_acompanantes + 1, 0) || 0;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirmaciones - Quinceañera</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+  <main class="confirmaciones">
+    <div class="container">
+      <header class="header">
+        <h1 class="header__title">Confirmaciones de Asistencia</h1>
+        <div class="header__stats">
+          <div class="stat">
+            <span class="stat__number">{totalConfirmaciones}</span>
+            <span class="stat__label">Confirmaciones</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">{totalPersonas}</span>
+            <span class="stat__label">Personas en total</span>
+          </div>
+        </div>
+      </header>
+
+      {error ? (
+        <div class="error">
+          <p>Error al cargar las confirmaciones: {error.message}</p>
+        </div>
+      ) : confirmaciones && confirmaciones.length > 0 ? (
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Acompañantes</th>
+                <th>Total Personas</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {confirmaciones.map((confirmacion) => (
+                <tr>
+                  <td class="table__name">{confirmacion.nombre}</td>
+                  <td class="table__phone">{confirmacion.telefono}</td>
+                  <td class="table__companions">{confirmacion.num_acompanantes}</td>
+                  <td class="table__total">{confirmacion.num_acompanantes + 1}</td>
+                  <td class="table__date">
+                    {new Date(confirmacion.created_at).toLocaleDateString('es-ES', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div class="empty">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="empty__icon">
+            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="empty__message">No hay confirmaciones aún</p>
+        </div>
+      )}
+
+      <div class="actions">
+        <a href="/" class="btn-back">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Volver a la invitación
+        </a>
+      </div>
+    </div>
+  </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --color-rose: #d4899e;
+    --color-rose-medium: #e8b4c4;
+    --color-rose-light: #f5d5de;
+    --color-rose-lighter: #fdf0f4;
+    --color-bg: #fffbf9;
+    --color-text: #4a3438;
+    --color-text-light: #8a6a70;
+    --color-white: #ffffff;
+    --font-script: "Alex Brush", cursive;
+    --font-body: "Lato", sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    line-height: 1.6;
+  }
+  .confirmaciones {
+    min-height: 100vh;
+    background: linear-gradient(
+      180deg,
+      #ffe8f0 0%,
+      #fff5f9 50%,
+      #fffbfc 100%
+    );
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header__title {
+    font-family: var(--font-script);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 400;
+    color: var(--color-rose);
+    margin-bottom: 32px;
+  }
+
+  .header__stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stat__number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-rose);
+    line-height: 1;
+  }
+
+  .stat__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .table-wrapper {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(74, 52, 56, 0.08);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table thead {
+    background: linear-gradient(
+      135deg,
+      var(--color-rose) 0%,
+      var(--color-rose-medium) 100%
+    );
+  }
+
+  .table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-rose-lighter);
+    color: var(--color-text);
+  }
+
+  .table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .table tbody tr:hover {
+    background: var(--color-rose-lighter);
+  }
+
+  .table__name {
+    font-weight: 600;
+  }
+
+  .table__phone {
+    color: var(--color-text-light);
+  }
+
+  .table__companions,
+  .table__total {
+    text-align: center;
+    font-weight: 600;
+    color: var(--color-rose);
+  }
+
+  .table__date {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    white-space: nowrap;
+  }
+
+  .error {
+    background: #fee;
+    border: 2px solid #fcc;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    color: #c00;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .empty__icon {
+    width: 80px;
+    height: 80px;
+    color: var(--color-rose-light);
+    margin-bottom: 24px;
+  }
+
+  .empty__message {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+  }
+
+  .actions {
+    margin-top: 48px;
+    text-align: center;
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-rose);
+    background: white;
+    border: 2px solid var(--color-rose);
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-back:hover {
+    background: var(--color-rose);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212, 137, 158, 0.3);
+  }
+
+  .btn-back svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .confirmaciones {
+      padding: 24px 16px;
+    }
+
+    .header__stats {
+      gap: 32px;
+    }
+
+    .stat__number {
+      font-size: 2.5rem;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .table {
+      min-width: 600px;
+    }
+
+    .table th,
+    .table td {
+      padding: 12px 16px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
