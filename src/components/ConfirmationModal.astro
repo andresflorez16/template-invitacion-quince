@@ -262,6 +262,8 @@
 </style>
 
 <script>
+  import { getSupabase } from '../lib/supabase';
+
   const modal = document.getElementById('confirmationModal');
   const closeBtn = modal?.querySelector('.modal__close');
   const overlay = modal?.querySelector('.modal__overlay');
@@ -308,19 +310,19 @@
     };
 
     try {
-      const response = await fetch('/api/confirmar', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const supabase = getSupabase();
+      const { error } = await supabase.from('confirmaciones').insert([
+        {
+          nombre: data.nombre,
+          telefono: data.telefono,
+          num_acompanantes: data.num_acompanantes,
         },
-        body: JSON.stringify(data),
-      });
+      ]);
 
-      if (!response.ok) {
-        throw new Error('Error al confirmar asistencia');
+      if (error) {
+        throw error;
       }
 
-      // Redirigir a página de confirmación exitosa
       window.location.href = '/confirmacion-exitosa';
 
     } catch (error) {
