@@ -11,7 +11,7 @@ import { invitation } from "../data/invitation";
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Lato:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -70,6 +70,30 @@ import { invitation } from "../data/invitation";
               <p class="event-info__value">{invitation.venue}</p>
               {invitation.address && <p class="event-info__address">{invitation.address}</p>}
               {invitation.city && <p class="event-info__address">{invitation.city}</p>}
+              <a
+                class="event-info__link"
+                href={invitation.directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {invitation.directionsLabel}
+              </a>
+            </div>
+          </div>
+
+          <div class="event-info__section">
+            <div class="event-info__icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12V22H4V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M22 7H2V12H22V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 22V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 7H7.5C6.83696 7 6.20107 6.73661 5.73223 6.26777C5.26339 5.79893 5 5.16304 5 4.5C5 3.83696 5.26339 3.20107 5.73223 2.73223C6.20107 2.26339 6.83696 2 7.5 2C11 2 12 7 12 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 7H16.5C17.163 7 17.7989 6.73661 18.2678 6.26777C18.7366 5.79893 19 5.16304 19 4.5C19 3.83696 18.7366 3.20107 18.2678 2.73223C17.7989 2.26339 17.163 2 16.5 2C13 2 12 7 12 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="event-info__content">
+              <h3 class="event-info__label">Regalo</h3>
+              <p class="event-info__gift">{invitation.gift}</p>
             </div>
           </div>
         </div>
@@ -251,6 +275,10 @@ import { invitation } from "../data/invitation";
     animation-delay: 0.9s;
   }
 
+  .event-info__section:nth-child(4) {
+    animation-delay: 1s;
+  }
+
   .event-info__icon {
     flex-shrink: 0;
     width: 48px;
@@ -287,10 +315,33 @@ import { invitation } from "../data/invitation";
     color: var(--color-text);
   }
 
+  .event-info__gift {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+    font-weight: 400;
+    color: var(--color-rose);
+    line-height: 1.15;
+  }
+
   .event-info__address {
     font-size: 0.95rem;
     color: var(--color-text-light);
     margin-top: 2px;
+  }
+
+  .event-info__link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-rose);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .event-info__link:hover {
+    color: var(--color-text);
   }
 
   .message {

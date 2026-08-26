@@ -22,6 +22,14 @@
               <span class="stat__label">Confirmaciones</span>
             </div>
             <div class="stat">
+              <span class="stat__number" id="totalAdultos">0</span>
+              <span class="stat__label">Adultos</span>
+            </div>
+            <div class="stat">
+              <span class="stat__number" id="totalNinos">0</span>
+              <span class="stat__label">Niños</span>
+            </div>
+            <div class="stat">
               <span class="stat__number" id="totalPersonas">0</span>
               <span class="stat__label">Personas en total</span>
             </div>
@@ -42,7 +50,8 @@
               <tr>
                 <th>Nombre</th>
                 <th>Teléfono</th>
-                <th>Acompañantes</th>
+                <th>Adultos</th>
+                <th>Niños</th>
                 <th>Total Personas</th>
                 <th>Fecha</th>
               </tr>
@@ -81,6 +90,7 @@
     nombre: string;
     telefono: string;
     num_acompanantes: number;
+    num_acompanantes_ninos: number | null;
     created_at: string;
   };
 
@@ -91,6 +101,8 @@
   const tableWrapperEl = document.getElementById('table-wrapper');
   const tableBodyEl = document.getElementById('table-body');
   const totalConfirmacionesEl = document.getElementById('totalConfirmaciones');
+  const totalAdultosEl = document.getElementById('totalAdultos');
+  const totalNinosEl = document.getElementById('totalNinos');
   const totalPersonasEl = document.getElementById('totalPersonas');
 
   try {
@@ -107,17 +119,26 @@
       errorEl?.removeAttribute('hidden');
     } else if (data && data.length > 0) {
       const confirmaciones = data as Confirmacion[];
-      const totalPersonas = confirmaciones.reduce(
-        (sum, item) => sum + item.num_acompanantes + 1,
+      const totalAdultos = confirmaciones.reduce(
+        (sum, item) => sum + (item.num_acompanantes || 0),
         0,
       );
+      const totalNinos = confirmaciones.reduce(
+        (sum, item) => sum + (item.num_acompanantes_ninos || 0),
+        0,
+      );
+      const totalPersonas = confirmaciones.length + totalAdultos + totalNinos;
 
       if (totalConfirmacionesEl) totalConfirmacionesEl.textContent = String(confirmaciones.length);
+      if (totalAdultosEl) totalAdultosEl.textContent = String(totalAdultos);
+      if (totalNinosEl) totalNinosEl.textContent = String(totalNinos);
       if (totalPersonasEl) totalPersonasEl.textContent = String(totalPersonas);
 
       if (tableBodyEl) {
         tableBodyEl.replaceChildren(
           ...confirmaciones.map((confirmacion) => {
+            const adultos = confirmacion.num_acompanantes || 0;
+            const ninos = confirmacion.num_acompanantes_ninos || 0;
             const row = document.createElement('tr');
 
             const nameCell = document.createElement('td');
@@ -128,13 +149,17 @@
             phoneCell.className = 'table__phone';
             phoneCell.textContent = confirmacion.telefono;
 
-            const companionsCell = document.createElement('td');
-            companionsCell.className = 'table__companions';
-            companionsCell.textContent = String(confirmacion.num_acompanantes);
+            const adultsCell = document.createElement('td');
+            adultsCell.className = 'table__companions';
+            adultsCell.textContent = String(adultos);
+
+            const kidsCell = document.createElement('td');
+            kidsCell.className = 'table__companions';
+            kidsCell.textContent = String(ninos);
 
             const totalCell = document.createElement('td');
             totalCell.className = 'table__total';
-            totalCell.textContent = String(confirmacion.num_acompanantes + 1);
+            totalCell.textContent = String(adultos + ninos + 1);
 
             const dateCell = document.createElement('td');
             dateCell.className = 'table__date';
@@ -146,7 +171,7 @@
               minute: '2-digit',
             });
 
-            row.append(nameCell, phoneCell, companionsCell, totalCell, dateCell);
+            row.append(nameCell, phoneCell, adultsCell, kidsCell, totalCell, dateCell);
             return row;
           }),
         );
@@ -398,7 +423,7 @@
     }
 
     .table {
-      min-width: 600px;
+      min-width: 720px;
     }
 
     .table th,

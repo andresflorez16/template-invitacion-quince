@@ -10,4 +10,7 @@ export const invitation = {
   venue: "IURA HUASI Club Campestre",
   address: "",
   city: "",
+  gift: "Lluvia de sobres",
+  directionsUrl: "https://www.facebook.com/IURAHUASICLUB/videos/503955234756321/",
+  directionsLabel: "Cómo llegar",
 };

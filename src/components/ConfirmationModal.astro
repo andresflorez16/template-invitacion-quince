@@ -38,19 +38,35 @@
         />
       </div>
 
-      <div class="form__group">
-        <label for="acompanantes" class="form__label">Número de acompañantes</label>
-        <input 
-          type="number" 
-          id="acompanantes" 
-          name="acompanantes" 
-          class="form__input" 
-          min="0" 
-          max="10" 
-          value="0" 
-          required 
-        />
-        <small class="form__hint">Sin incluirte tú</small>
+      <div class="form__row">
+        <div class="form__group">
+          <label for="acompanantesAdultos" class="form__label">Número de acompañantes adultos</label>
+          <input 
+            type="number" 
+            id="acompanantesAdultos" 
+            name="acompanantes_adultos" 
+            class="form__input" 
+            min="0" 
+            max="10" 
+            value="0" 
+            required 
+          />
+          <small class="form__hint">Sin incluirte tú</small>
+        </div>
+
+        <div class="form__group">
+          <label for="acompanantesNinos" class="form__label">Número de acompañantes niños</label>
+          <input 
+            type="number" 
+            id="acompanantesNinos" 
+            name="acompanantes_ninos" 
+            class="form__input" 
+            min="0" 
+            max="10" 
+            value="0" 
+            required 
+          />
+        </div>
       </div>
 
       <button type="submit" class="form__submit">
@@ -144,6 +160,19 @@
     color: var(--color-text-light);
     text-align: center;
     margin-bottom: 32px;
+  }
+
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  @media (min-width: 520px) {
+    .form__row {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
   }
 
   .form__group {
@@ -306,7 +335,8 @@
     const data = {
       nombre: formData.get('nombre'),
       telefono: formData.get('telefono'),
-      num_acompanantes: parseInt(formData.get('acompanantes') as string),
+      num_acompanantes: parseInt(formData.get('acompanantes_adultos') as string, 10) || 0,
+      num_acompanantes_ninos: parseInt(formData.get('acompanantes_ninos') as string, 10) || 0,
     };
 
     try {
@@ -316,6 +346,7 @@
           nombre: data.nombre,
           telefono: data.telefono,
           num_acompanantes: data.num_acompanantes,
+          num_acompanantes_ninos: data.num_acompanantes_ninos,
         },
       ]);
 

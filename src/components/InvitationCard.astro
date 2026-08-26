@@ -156,6 +156,18 @@ import { invitation } from "../data/invitation";
       <p class="venue__city">{invitation.city}</p>
     </address>
 
+    <div class="card__notes" data-animate>
+      <p class="card__gift">{invitation.gift}</p>
+      <a
+        class="card__directions"
+        href={invitation.directionsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {invitation.directionsLabel}
+      </a>
+    </div>
+
     <div class="card__action" data-animate>
       <button id="confirmBtn" class="btn" type="button">Confirmar asistencia</button>
     </div>
@@ -685,6 +697,37 @@ import { invitation } from "../data/invitation";
     font-size: 0.9rem;
     font-weight: 300;
     color: var(--color-text-light);
+  }
+
+  .card__notes {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeInUp 0.8s ease-out 1.5s backwards;
+  }
+
+  .card__gift {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    font-weight: 400;
+    color: var(--color-rose);
+    line-height: 1.15;
+  }
+
+  .card__directions {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-rose);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .card__directions:hover {
+    color: var(--color-text);
   }
 
   .card__action {
