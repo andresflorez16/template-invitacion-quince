@@ -4,18 +4,22 @@ import { createClient } from '@supabase/supabase-js';
 // Marcar esta ruta como server-rendered
 export const prerender = false;
 
-// En las API routes de Astro, usamos process.env para variables del servidor
-const supabaseUrl = process.env.SUPABASE_URL || import.meta.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY || import.meta.env.SUPABASE_PUBLISHABLE_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Faltan variables de entorno de Supabase. Asegúrate de que SUPABASE_URL y SUPABASE_PUBLISHABLE_KEY estén definidas.');
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export const POST: APIRoute = async ({ request }) => {
   try {
+    // Inicializar Supabase dentro de la función
+    const supabaseUrl = process.env.SUPABASE_URL || import.meta.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY || import.meta.env.SUPABASE_PUBLISHABLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Variables de Supabase no encontradas');
+      return new Response(
+        JSON.stringify({ error: 'Configuración de base de datos no disponible' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     // Obtener el texto raw primero
     const text = await request.text();
     
