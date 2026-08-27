@@ -1,0 +1,134 @@
+<video
+  id="invitationAudio"
+  src="/audio.mov"
+  loop
+  playsinline
+  preload="auto"
+  class="bg-audio"
+></video>
+
+<button
+  type="button"
+  id="musicToggle"
+  class="music-toggle"
+  aria-label="Reproducir música"
+  aria-pressed="false"
+>
+  <svg class="music-toggle__icon music-toggle__icon--play" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M9 18V6L21 12L9 18Z" fill="currentColor"/>
+  </svg>
+  <svg class="music-toggle__icon music-toggle__icon--pause" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M6 5H10V19H6V5ZM14 5H18V19H14V5Z" fill="currentColor"/>
+  </svg>
+</button>
+
+<style>
+  .bg-audio {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .music-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10001;
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    background: linear-gradient(
+      135deg,
+      var(--color-rose) 0%,
+      var(--color-rose-medium) 100%
+    );
+    box-shadow: 0 4px 16px rgba(212, 137, 158, 0.35);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .music-toggle:hover {
+    transform: translateY(-1px);
+  }
+
+  .music-toggle__icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .music-toggle__icon--pause {
+    display: none;
+  }
+
+  .music-toggle.is-playing .music-toggle__icon--play {
+    display: none;
+  }
+
+  .music-toggle.is-playing .music-toggle__icon--pause {
+    display: block;
+  }
+</style>
+
+<script>
+  const media = document.getElementById('invitationAudio') as HTMLVideoElement | null;
+  const toggle = document.getElementById('musicToggle');
+
+  const setPlayingUi = (playing: boolean) => {
+    toggle?.classList.toggle('is-playing', playing);
+    toggle?.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    toggle?.setAttribute('aria-label', playing ? 'Pausar música' : 'Reproducir música');
+  };
+
+  const tryPlay = async () => {
+    if (!media) return false;
+    try {
+      media.volume = 0.7;
+      await media.play();
+      setPlayingUi(true);
+      return true;
+    } catch {
+      setPlayingUi(false);
+      return false;
+    }
+  };
+
+  let unlocked = false;
+
+  const unlock = () => {
+    if (unlocked) return;
+    void tryPlay().then((ok) => {
+      if (!ok) return;
+      unlocked = true;
+      document.removeEventListener('pointerdown', unlock);
+      document.removeEventListener('keydown', unlock);
+    });
+  };
+
+  void tryPlay().then((ok) => {
+    if (ok) {
+      unlocked = true;
+      return;
+    }
+    document.addEventListener('pointerdown', unlock, { passive: true });
+    document.addEventListener('keydown', unlock);
+  });
+
+  media?.addEventListener('play', () => setPlayingUi(true));
+  media?.addEventListener('pause', () => setPlayingUi(false));
+
+  toggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (!media) return;
+    if (media.paused) {
+      void tryPlay();
+    } else {
+      media.pause();
+    }
+  });
+</script>
